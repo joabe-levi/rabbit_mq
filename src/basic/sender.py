@@ -1,3 +1,6 @@
+import time, sys, os, json
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from src.interface.sender import ISender
 import pika as rabbitmq
 from config import settings
@@ -5,8 +8,11 @@ from config import settings
 
 class BasicSender(ISender):
 
-    def __init__(self, queue) -> None:
+    def __init__(self, exchange, routind_key, queue) -> None:
+        self._exchange = exchange
+        self._routind_key = routind_key
         self._queue = queue
+
         self.get_connection()
 
     def get_connection_parameters(self):
@@ -24,6 +30,14 @@ class BasicSender(ISender):
 
         except Exception as err:
             print(f"Error: {err}")
+
+    def send_message(self, message):
+        self._channel.basic_publish(
+            exchange=self._exchange, 
+            routing_key=self._routind_key, 
+            body=json.dumps(message)
+        )
+        print(f'Message sent to queue: {self._queue}')
 
     def close_connection(self):
         if self._channel and self._channel.is_open:

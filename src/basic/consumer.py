@@ -1,6 +1,9 @@
-from src.interface.consumer import IConsumer
+import time, sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 import pika as rabbitmq
 from config import settings
+from src.interface.consumer import IConsumer
 
 
 class BasicConsumer(IConsumer):
@@ -8,7 +11,7 @@ class BasicConsumer(IConsumer):
     def __init__(self, queue) -> None:
         self._queue = queue
         self.get_connection()
-        self.queue_declare()
+        # self.queue_declare()
 
     def get_connection_parameters(self):
         return rabbitmq.ConnectionParameters(
@@ -31,7 +34,9 @@ class BasicConsumer(IConsumer):
 
     def consume(self):
         try:
-            self._channel.basic_consume(queue=self._queue, on_message_callback=self.callback, auto_ack=True)
+            self._channel.basic_consume(
+                queue=self._queue, on_message_callback=self.callback, auto_ack=True
+            )
             print(f"Waiting messages in queue: {self._queue}...")
             self._channel.start_consuming()
 
@@ -47,3 +52,4 @@ class BasicConsumer(IConsumer):
             self._connection.close()
             print('Connection closed.')
 
+BasicConsumer('test_queue').consume()

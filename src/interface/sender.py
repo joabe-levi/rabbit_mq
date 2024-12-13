@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Dict
 
 
 class ISender(ABC):
@@ -17,13 +18,13 @@ class ISender(ABC):
         raise NotImplementedError('Method must be implemented.')
 
     @abstractmethod
-    def send_message(self, message: str) -> None:
+    def send_message(self, message: Dict) -> None:
         """
         Sends a message to the connected service.
         Example:
             def send_message(self, message):
                 self.channel.basic_publish(
-                    exchange='', routing_key=self.queue, body=message
+                    exchange='', routing_key=self._routing_key, body=message
                 )
         """
         raise NotImplementedError('Method must be implemented.')

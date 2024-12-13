@@ -1,9 +1,11 @@
 from dotenv import load_dotenv
-import os
+import os, sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 load_dotenv()
 
-host = os.get_env('host')
-port = os.get_env('port')
-username = os.get_env('username')
-password = os.get_env('password')
+host = os.getenv('host')
+port = os.getenv('port')
+username = os.getenv('username')
+password = os.getenv('password')
