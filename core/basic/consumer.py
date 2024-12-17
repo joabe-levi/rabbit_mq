@@ -1,9 +1,9 @@
-import time, sys, os
+import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import pika as rabbitmq
 from config import settings
-from src.interface.consumer import IConsumer
+from core.interface.consumer import IConsumer
 
 
 class BasicConsumer(IConsumer):
@@ -11,7 +11,6 @@ class BasicConsumer(IConsumer):
     def __init__(self, queue) -> None:
         self._queue = queue
         self.get_connection()
-        # self.queue_declare()
 
     def get_connection_parameters(self):
         return rabbitmq.ConnectionParameters(
@@ -24,7 +23,8 @@ class BasicConsumer(IConsumer):
 
     def get_connection(self):
         try:
-            self._channel = rabbitmq.BlockingConnection(self.get_connection_parameters()).channel()
+            self._connection = rabbitmq.BlockingConnection(self.get_connection_parameters())
+            self._channel = self._connection.channel()
             self._channel.queue_declare(queue=self._queue, durable=True)
         except Exception as err:
             print(f"Unable to connect to the consumer: {err}")
@@ -46,10 +46,8 @@ class BasicConsumer(IConsumer):
     def close_connection(self):
         if self._channel and self._channel.is_open:
             self._channel.close()
-            print('Channel closed.')
 
         if self._connection and self._connection.is_open:
             self._connection.close()
-            print('Connection closed.')
 
-BasicConsumer('test_queue').consume()
+        print('Consumer closed.')

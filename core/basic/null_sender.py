@@ -3,7 +3,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from interface.sender import ISender
 
-from src.interface.sender import ISender
+from core.interface.sender import ISender
 
 
 class BasicNullSender(ISender):

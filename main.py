@@ -1,21 +1,15 @@
-import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-from src.basic.sender import BasicSender
-from src.basic.consumer import BasicConsumer
+from core.basic.consumer import BasicConsumer
 
 
 def main():
-    queue_name = 'minha_fila'
-
-    sender = BasicSender(queue_name)
-    sender.create_queue()
-
-    consumer = BasicConsumer(queue_name)
-
-    consumer.consume()
-    sender.close_connection()
-
+    try:
+        queue_name = 'amazon_queue'
+        consumer = BasicConsumer(queue_name)
+        consumer.consume()
+        
+    finally:
+        consumer.close_connection()
+        print('Consumer closed.')
 
 if __name__ == '__main__':
     main()

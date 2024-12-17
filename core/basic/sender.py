@@ -1,7 +1,7 @@
-import time, sys, os, json
+import sys, os, json
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from src.interface.sender import ISender
+from core.interface.sender import ISender
 import pika as rabbitmq
 from config import settings
 
@@ -42,8 +42,9 @@ class BasicSender(ISender):
     def close_connection(self):
         if self._channel and self._channel.is_open:
             self._channel.close()
-            print('Channel closed.')
 
         if self._connection and self._connection.is_open:
             self._connection.close()
-            print('Connection closed.')
+
+
+        print('Consumer closed.')
