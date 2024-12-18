@@ -2,15 +2,15 @@ import sys, os
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT_DIR)
 
-from core.basic.sender import BasicSender
+from core.basic.basic_sender.sender import BasicSender
 
 
 class AmazonBuilder:
 
-    def __init__(self, exchange='amazon_exchange', queue='amazon_queue', routind_key=''):
+    def __init__(self, exchange='amazon_exchange', queue='amazon_queue', routing_key=''):
         self._exchange = exchange
         self._queue = queue
-        self._routing_key = routind_key
+        self._routing_key = routing_key
         self.sender = BasicSender(self._exchange, self._routing_key, self._queue)
 
     def bind_queue(self):
